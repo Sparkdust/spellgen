@@ -313,6 +313,16 @@ function generateSpellsUpTo(targetIndex) {
     }
 }
 
+// Generate all traits from index 0 up to and including targetIndex
+function generateTraitsUpTo(targetIndex) {
+    for (let i = 0; i <= targetIndex; i++) {
+        if (!characteristics.traits[i]) {
+            characteristics.traits[i] = generateTrait();
+            updateTraitRow(i);
+        }
+    }
+}
+
 // Initialize event listeners
 function init() {
     // Load saved character sheet
@@ -334,10 +344,9 @@ function init() {
         const replaceBtn = row.querySelector('.btn-replace');
         const deleteBtn = row.querySelector('.btn-delete');
 
-        // Generate button click
+        // Generate button click - generates all traits up to this one
         generateBtn.addEventListener('click', () => {
-            characteristics.traits[index] = generateTrait();
-            updateTraitRow(index);
+            generateTraitsUpTo(index);
         });
 
         // Replace button click
