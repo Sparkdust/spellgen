@@ -342,7 +342,20 @@ function updateCharacteristicRow(type, index) {
 function generateSpellsUpTo(targetIndex) {
     for (let i = 0; i <= targetIndex; i++) {
         if (!spells[i]) {
-            spells[i] = generateSpellName();
+            // Get all currently used spell names
+            const usedSpells = spells.filter(spell => spell !== null && spell !== '');
+
+            // Generate a spell, re-rolling if it's a duplicate
+            let newSpell = generateSpellName();
+            let attempts = 0;
+            const maxAttempts = 50; // Prevent infinite loop
+
+            while (usedSpells.includes(newSpell) && attempts < maxAttempts) {
+                newSpell = generateSpellName();
+                attempts++;
+            }
+
+            spells[i] = newSpell;
             updateSpellRow(i);
         }
     }
@@ -355,7 +368,17 @@ function generateCharacteristicsUpTo(type, targetIndex) {
 
     for (let i = 0; i <= targetIndex; i++) {
         if (!characteristics[type][i]) {
-            characteristics[type][i] = generateFromList(list);
+            // Get all currently used values for this type (excluding nulls)
+            const usedValues = characteristics[type].filter(val => val !== null && val !== '');
+            // Generate from list, avoiding all used values
+            const availableOptions = list.filter(item => !usedValues.includes(item));
+
+            // If we have available options, use them; otherwise fall back to full list
+            if (availableOptions.length > 0) {
+                characteristics[type][i] = randomElement(availableOptions);
+            } else {
+                characteristics[type][i] = randomElement(list);
+            }
             updateCharacteristicRow(type, i);
         }
     }
@@ -410,8 +433,16 @@ function init() {
                     // If blank, generate all blanks up to this index
                     generateCharacteristicsUpTo(type, index);
                 } else {
-                    // If filled, replace with different value
-                    characteristics[type][index] = generateFromList(list, currentValue);
+                    // If filled, replace with different value avoiding all used values
+                    const usedValues = characteristics[type].filter(val => val !== null && val !== '');
+                    const availableOptions = list.filter(item => !usedValues.includes(item));
+
+                    if (availableOptions.length > 0) {
+                        characteristics[type][index] = randomElement(availableOptions);
+                    } else {
+                        // If all options used, just pick a different one from current
+                        characteristics[type][index] = generateFromList(list, currentValue);
+                    }
                     updateCharacteristicRow(type, index);
                 }
             });
@@ -442,8 +473,18 @@ function init() {
                 // If blank, generate all blanks up to this index
                 generateSpellsUpTo(index);
             } else {
-                // If filled, replace with new spell
-                spells[index] = generateSpellName();
+                // If filled, replace with new spell avoiding duplicates
+                const usedSpells = spells.filter(spell => spell !== null && spell !== '');
+                let newSpell = generateSpellName();
+                let attempts = 0;
+                const maxAttempts = 50;
+
+                while (usedSpells.includes(newSpell) && attempts < maxAttempts) {
+                    newSpell = generateSpellName();
+                    attempts++;
+                }
+
+                spells[index] = newSpell;
                 updateSpellRow(index);
             }
         });
