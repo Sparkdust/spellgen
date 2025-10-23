@@ -126,9 +126,9 @@ const FORMS = [
 const TRAITS = [
     "Acrobat", "Agile", "Alchemist", "Archer", "Athletic",
     "Axemaster", "Berserker", "Bladedancer", "Brawler", "Brave",
-    "Catburglar", "Charismatic", "Cunning", "Deadly", "Defender",
+    "Catburglar", "Charismatic", "Deadly", "Defender",
     "Delver", "Duelist", "Explorer", "Fighter", "Healer",
-    "Herbalist", "Holy", "Hunter", "Knight", "Mystical",
+    "Herbalist", "Holy", "Hunter", "Knight", "Mighty", "Mystical",
     "Nimble", "Perceptive", "Resilient", "Rider", "Sailor",
     "Scout", "Shieldbearer", "Spearmaster", "Stealthy", "Strong",
     "Sturdy", "Survivalist", "Swift", "Swordmaster", "Thief",
@@ -316,19 +316,9 @@ function loadCharacterSheet() {
 // Update the UI for a specific spell row
 function updateSpellRow(index) {
     const row = document.querySelector(`.spell-row[data-index="${index}"]`);
-    const generateBtn = row.querySelector('.btn-generate');
     const spellNameEl = row.querySelector('.spell-name');
-    const actionsEl = row.querySelector('.spell-actions');
 
-    if (spells[index]) {
-        generateBtn.classList.add('hidden');
-        spellNameEl.textContent = spells[index];
-        actionsEl.classList.remove('hidden');
-    } else {
-        generateBtn.classList.remove('hidden');
-        spellNameEl.textContent = '';
-        actionsEl.classList.add('hidden');
-    }
+    spellNameEl.textContent = spells[index] || '';
 
     // Save to localStorage whenever UI updates
     saveCharacterSheet();
@@ -339,19 +329,10 @@ function updateCharacteristicRow(type, index) {
     const row = document.querySelector(`.${type}-row[data-index="${index}"]`);
     if (!row) return;
 
-    const generateBtn = row.querySelector('.btn-generate');
-    const nameEl = row.querySelector(`.${type}-name`);
-    const actionsEl = row.querySelector(`.${type}-actions`);
+    const inputEl = row.querySelector(`.${type}-input`);
+    if (!inputEl) return;
 
-    if (characteristics[type][index]) {
-        generateBtn.classList.add('hidden');
-        nameEl.textContent = characteristics[type][index];
-        actionsEl.classList.remove('hidden');
-    } else {
-        generateBtn.classList.remove('hidden');
-        nameEl.textContent = '';
-        actionsEl.classList.add('hidden');
-    }
+    inputEl.value = characteristics[type][index] || '';
 
     // Save to localStorage whenever UI updates
     saveCharacterSheet();
@@ -392,6 +373,19 @@ function init() {
 
     // Generic setup for characteristic rows (traits, ribbon, etc.)
     function setupCharacteristicRows(type) {
+        const list = CHARACTERISTIC_LISTS[type];
+
+        // Populate datalist with options
+        const datalist = document.getElementById(`${type}-list`);
+        if (datalist) {
+            datalist.innerHTML = '';
+            list.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                datalist.appendChild(option);
+            });
+        }
+
         // Update UI for all rows
         for (let i = 0; i < characteristics[type].length; i++) {
             updateCharacteristicRow(type, i);
@@ -399,21 +393,27 @@ function init() {
 
         // Setup event listeners
         document.querySelectorAll(`.${type}-row`).forEach((row, index) => {
-            const generateBtn = row.querySelector('.btn-generate');
+            const inputEl = row.querySelector(`.${type}-input`);
             const replaceBtn = row.querySelector('.btn-replace');
             const deleteBtn = row.querySelector('.btn-delete');
-            const list = CHARACTERISTIC_LISTS[type];
 
-            // Generate button - generates all up to this one
-            generateBtn.addEventListener('click', () => {
-                generateCharacteristicsUpTo(type, index);
+            // Input change - save user's custom entry
+            inputEl.addEventListener('input', () => {
+                characteristics[type][index] = inputEl.value || null;
+                saveCharacterSheet();
             });
 
-            // Replace button - avoids repeating current value
+            // Replace button - generates if blank, replaces if filled
             replaceBtn.addEventListener('click', () => {
-                const previousValue = characteristics[type][index];
-                characteristics[type][index] = generateFromList(list, previousValue);
-                updateCharacteristicRow(type, index);
+                const currentValue = characteristics[type][index];
+                if (!currentValue) {
+                    // If blank, generate all blanks up to this index
+                    generateCharacteristicsUpTo(type, index);
+                } else {
+                    // If filled, replace with different value
+                    characteristics[type][index] = generateFromList(list, currentValue);
+                    updateCharacteristicRow(type, index);
+                }
             });
 
             // Delete button
@@ -430,39 +430,22 @@ function init() {
     setupCharacteristicRows('quirks');
     setupCharacteristicRows('equipment');
 
-    // Update characteristic inputs with loaded values
-    document.querySelectorAll('.characteristic-row').forEach(row => {
-        const section = row.dataset.section;
-        const index = parseInt(row.dataset.index);
-        const input = row.querySelector('.characteristic-input');
-
-        if (characteristics[section] && characteristics[section][index] !== undefined) {
-            input.value = characteristics[section][index];
-        }
-
-        // Save when characteristic changes
-        input.addEventListener('input', () => {
-            characteristics[section][index] = input.value;
-            saveCharacterSheet();
-        });
-    });
-
     const rows = document.querySelectorAll('.spell-row');
 
     rows.forEach((row, index) => {
-        const generateBtn = row.querySelector('.btn-generate');
         const replaceBtn = row.querySelector('.btn-replace');
         const deleteBtn = row.querySelector('.btn-delete');
 
-        // Generate button click
-        generateBtn.addEventListener('click', () => {
-            generateSpellsUpTo(index);
-        });
-
-        // Replace button click
+        // Replace button click - generates if blank, replaces if filled
         replaceBtn.addEventListener('click', () => {
-            spells[index] = generateSpellName();
-            updateSpellRow(index);
+            if (!spells[index]) {
+                // If blank, generate all blanks up to this index
+                generateSpellsUpTo(index);
+            } else {
+                // If filled, replace with new spell
+                spells[index] = generateSpellName();
+                updateSpellRow(index);
+            }
         });
 
         // Delete button click

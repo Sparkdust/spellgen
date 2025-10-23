@@ -112,14 +112,25 @@ h2 {
     background: rgba(255, 255, 255, 0.08);
 }
 
-.traits-name,
-.ribbons-name,
-.quirks-name,
-.equipment-name {
+.traits-input,
+.ribbons-input,
+.quirks-input,
+.equipment-input {
     flex: 1;
     font-size: 1.125rem;
     color: #f0c674;
     font-weight: 500;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+}
+
+.traits-input::placeholder,
+.ribbons-input::placeholder,
+.quirks-input::placeholder,
+.equipment-input::placeholder {
+    color: rgba(240, 198, 116, 0.3);
 }
 
 .traits-actions,
@@ -128,13 +139,6 @@ h2 {
 .equipment-actions {
     display: flex;
     gap: 0.5rem;
-}
-
-.traits-actions.hidden,
-.ribbons-actions.hidden,
-.quirks-actions.hidden,
-.equipment-actions.hidden {
-    display: none;
 }
 
 .characteristic-input {
@@ -165,31 +169,6 @@ h2 {
     background: rgba(255, 255, 255, 0.08);
 }
 
-.btn-generate {
-    padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    min-width: 90px;
-}
-
-.btn-generate:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
-}
-
-.btn-generate:active {
-    transform: translateY(0);
-}
-
-.btn-generate.hidden {
-    display: none;
-}
 
 .spell-name {
     flex: 1;
@@ -201,10 +180,6 @@ h2 {
 .spell-actions {
     display: flex;
     gap: 0.5rem;
-}
-
-.spell-actions.hidden {
-    display: none;
 }
 
 .btn-replace,
