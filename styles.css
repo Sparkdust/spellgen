@@ -87,6 +87,7 @@ h2 {
 
 .traits-row,
 .ribbons-row,
+.quirks-row,
 .characteristic-row {
     display: flex;
     align-items: center;
@@ -100,12 +101,14 @@ h2 {
 
 .traits-row:hover,
 .ribbons-row:hover,
+.quirks-row:hover,
 .characteristic-row:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
 .traits-name,
-.ribbons-name {
+.ribbons-name,
+.quirks-name {
     flex: 1;
     font-size: 1.125rem;
     color: #f0c674;
@@ -113,13 +116,15 @@ h2 {
 }
 
 .traits-actions,
-.ribbons-actions {
+.ribbons-actions,
+.quirks-actions {
     display: flex;
     gap: 0.5rem;
 }
 
 .traits-actions.hidden,
-.ribbons-actions.hidden {
+.ribbons-actions.hidden,
+.quirks-actions.hidden {
     display: none;
 }
 

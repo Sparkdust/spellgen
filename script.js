@@ -151,6 +151,21 @@ const RIBBONS = [
     "Watchmaker", "Weaver", "Woodcarver"
 ];
 
+// Table of quirks (alphabetically sorted) - flaws and complications
+const QUIRKS = [
+    "Addicted", "Afraid of Blood", "Afraid of Crowds", "Afraid of Darkness", "Afraid of Fire",
+    "Afraid of Heights", "Afraid of Magic", "Afraid of Water", "Arrogant", "Boastful",
+    "Compulsive Liar", "Cowardly", "Cursed", "Distrustful", "Envious",
+    "Foul-Mouthed", "Gluttonous", "Greedy", "Gullible", "Haughty",
+    "Honest to a Fault", "Impulsive", "Indecisive", "Jealous", "Kleptomaniac",
+    "Lawful to a Fault", "Lazy", "Loud", "Lover of Drink", "Lustful",
+    "Melancholic", "Merciful to a Fault", "Naive", "Nervous Tic", "Oath-Bound",
+    "Obsessive", "Overconfident", "Overly Curious", "Overspender", "Pacifist",
+    "Paranoid", "Perfectionist", "Prideful", "Reckless", "Secretive",
+    "Superstitious", "Suspicious", "Unforgiving", "Vengeful", "Vow of Poverty",
+    "Vow of Silence"
+];
+
 // State to track generated spells
 const spells = new Array(6).fill(null);
 
@@ -158,7 +173,7 @@ const spells = new Array(6).fill(null);
 const characteristics = {
     traits: new Array(3).fill(null),
     ribbons: new Array(3).fill(null),
-    quirks: new Array(3).fill(''),
+    quirks: new Array(3).fill(null),
     equipment: new Array(3).fill('')
 };
 
@@ -199,7 +214,8 @@ function generateFromList(list, previousValue = null) {
 // Lookup table for characteristic lists
 const CHARACTERISTIC_LISTS = {
     'traits': TRAITS,
-    'ribbons': RIBBONS
+    'ribbons': RIBBONS,
+    'quirks': QUIRKS
 };
 
 // Generate a spell name
@@ -396,6 +412,7 @@ function init() {
     // Setup all characteristic types
     setupCharacteristicRows('traits');
     setupCharacteristicRows('ribbons');
+    setupCharacteristicRows('quirks');
 
     // Update characteristic inputs with loaded values
     document.querySelectorAll('.characteristic-row').forEach(row => {
