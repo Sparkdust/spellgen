@@ -165,15 +165,15 @@ const QUIRKS = [
     "Cannot Whisper", "Can't Stop Telling Truth", "Chronic Amnesia", "Collects Strange Things", "Compulsive Counter",
     "Compulsive Hoarder", "Compulsive Liar", "Conspiracy Theorist", "Cowardly", "Cursed",
     "Distrustful", "Eats Only One Color", "Envious", "Extremely Superstitious", "Foul-Mouthed",
-    "Gluttonous", "Greedy", "Gullible", "Haughty", "Hiccups When Lying",
+    "Frail", "Gluttonous", "Greedy", "Gullible", "Haughty", "Hiccups When Lying",
     "Honest to a Fault", "Impulsive", "Indecisive", "Jealous", "Kleptomaniac",
     "Laughs at Inappropriate Times", "Lawful to a Fault", "Lazy", "Loud", "Loudmouth",
     "Lover of Drink", "Melancholic", "Merciful to a Fault", "Must Rhyme When Speaking", "Naive",
     "Narcoleptic", "Nervous Tic", "Oath-Bound", "Obsessive", "Overconfident",
     "Overly Curious", "Overspender", "Pacifist", "Paranoid", "Perfectionist",
     "Prideful", "Prophetic Dreams (Always Wrong)", "Reckless", "Secretive", "Sees Ghosts (No One Believes)",
-    "Sleepwalker", "Speaks in Third Person", "Superstitious", "Suspicious", "Talks to Inanimate Objects",
-    "Thinks They're Famous", "Unforgiving", "Vengeful", "Vow of Poverty", "Vow of Silence"
+    "Sickly", "Sleepwalker", "Speaks in Third Person", "Superstitious", "Suspicious", "Talks to Inanimate Objects",
+    "Thinks They're Famous", "Unforgiving", "Vengeful", "Vow of Poverty", "Vow of Silence", "Weak"
 ];
 
 // Table of equipment (alphabetically sorted) - mundane, mechanical, and minor magical items
@@ -207,6 +207,39 @@ const characteristics = {
     quirks: new Array(3).fill(null),
     equipment: new Array(4).fill(null)
 };
+
+// State to track health (true = full, false = empty)
+const health = new Array(6).fill(true);
+
+// Traits that give an extra heart
+const TOUGH_TRAITS = ["Berserker", "Mighty", "Resilient", "Strong", "Sturdy", "Tough", "Veteran", "Vigorous", "Warrior"];
+
+// Quirks that remove a heart
+const WEAK_QUIRKS = ["Frail", "Sickly"];
+
+// Calculate max hearts based on traits and quirks
+function calculateMaxHearts() {
+    let maxHearts = 3; // Base hearts
+
+    // Count tough traits (case-insensitive, each adds +1 heart)
+    const toughTraitCount = characteristics.traits.filter(trait => {
+        if (!trait) return false;
+        const traitLower = trait.toLowerCase();
+        return TOUGH_TRAITS.some(toughTrait => toughTrait.toLowerCase() === traitLower);
+    }).length;
+    maxHearts += toughTraitCount;
+
+    // Count weak quirks (case-insensitive, each removes -1 heart)
+    const weakQuirkCount = characteristics.quirks.filter(quirk => {
+        if (!quirk) return false;
+        const quirkLower = quirk.toLowerCase();
+        return WEAK_QUIRKS.some(weakQuirk => weakQuirk.toLowerCase() === quirkLower);
+    }).length;
+    maxHearts -= weakQuirkCount;
+
+    // Clamp between 1 and 6
+    return Math.max(1, Math.min(6, maxHearts));
+}
 
 // Get a random element from an array
 function randomElement(array) {
@@ -294,7 +327,8 @@ function saveCharacterSheet() {
     const characterSheet = {
         name: characterName,
         spells: spells,
-        characteristics: characteristics
+        characteristics: characteristics,
+        health: health
     };
     localStorage.setItem('spellgenCharacter', JSON.stringify(characterSheet));
 }
@@ -324,6 +358,13 @@ function loadCharacterSheet() {
                     }
                 }
             }
+
+            // Load health
+            if (characterSheet.health && Array.isArray(characterSheet.health)) {
+                for (let i = 0; i < characterSheet.health.length && i < health.length; i++) {
+                    health[i] = characterSheet.health[i];
+                }
+            }
         } catch (e) {
             console.error('Error loading character sheet:', e);
         }
@@ -351,7 +392,51 @@ function updateCharacteristicRow(type, index) {
 
     inputEl.value = characteristics[type][index] || '';
 
+    // Update hearts if traits or quirks changed
+    if (type === 'traits' || type === 'quirks') {
+        updateAllHeartsUI();
+    }
+
     // Save to localStorage whenever UI updates
+    saveCharacterSheet();
+}
+
+// Update a single heart's UI
+function updateHeartUI(index) {
+    const heart = document.querySelector(`.heart[data-index="${index}"]`);
+    if (!heart) return;
+
+    const maxHearts = calculateMaxHearts();
+    const firstActiveIndex = 6 - maxHearts;
+
+    if (index < firstActiveIndex) {
+        // Heart is disabled (leftmost hearts are disabled)
+        heart.classList.add('disabled');
+        heart.classList.remove('full', 'empty');
+    } else {
+        // Heart is active (rightmost hearts are active)
+        heart.classList.remove('disabled');
+        if (health[index]) {
+            heart.classList.add('full');
+            heart.classList.remove('empty');
+        } else {
+            heart.classList.remove('full');
+            heart.classList.add('empty');
+        }
+    }
+}
+
+// Update all hearts UI
+function updateAllHeartsUI() {
+    for (let i = 0; i < 6; i++) {
+        updateHeartUI(i);
+    }
+}
+
+// Toggle a heart between full and empty
+function toggleHeart(index) {
+    health[index] = !health[index];
+    updateHeartUI(index);
     saveCharacterSheet();
 }
 
@@ -411,6 +496,13 @@ function init() {
         updateSpellRow(i);
     }
 
+    // Setup heart click listeners
+    document.querySelectorAll('.heart').forEach((heart, index) => {
+        heart.addEventListener('click', () => {
+            toggleHeart(index);
+        });
+    });
+
     // Generic setup for characteristic rows (traits, ribbon, etc.)
     function setupCharacteristicRows(type) {
         const list = CHARACTERISTIC_LISTS[type];
@@ -440,6 +532,12 @@ function init() {
             // Input change - save user's custom entry
             inputEl.addEventListener('input', () => {
                 characteristics[type][index] = inputEl.value || null;
+
+                // Update hearts if traits or quirks changed
+                if (type === 'traits' || type === 'quirks') {
+                    updateAllHeartsUI();
+                }
+
                 saveCharacterSheet();
             });
 
@@ -477,6 +575,9 @@ function init() {
     setupCharacteristicRows('ribbons');
     setupCharacteristicRows('quirks');
     setupCharacteristicRows('equipment');
+
+    // Initialize hearts based on traits and quirks
+    updateAllHeartsUI();
 
     const rows = document.querySelectorAll('.spell-row');
 
