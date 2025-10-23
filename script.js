@@ -5,7 +5,7 @@ const EFFECTS = [
     { name: "light", nounForm: "light" },
     { name: "illuminating", nounForm: "illumination" },
     { name: "dazzling", nounForm: null },
-    { name: "dark", nounForm: "darkness" },
+    { name: "darkening", nounForm: "darkness" },
     { name: "shadow", nounForm: "shadow" },
     { name: "growing", nounForm: "growth" },
     { name: "shrinking", nounForm: null },
@@ -17,6 +17,7 @@ const EFFECTS = [
     { name: "toxic", nounForm: "toxin" },
     { name: "deadly", nounForm: "death" },
     { name: "necrotic", nounForm: "necrosis" },
+    { name: "paralyzing", nounForm: "paralysis" },
     { name: "living", nounForm: "life" },
     { name: "healing", nounForm: "health" },
     { name: "silent", nounForm: "silence" },
@@ -71,6 +72,7 @@ const EFFECTS = [
     { name: "unholy", nounForm: null },
     { name: "divine", nounForm: "divinity" },
     { name: "infernal", nounForm: "inferno" },
+    { name: "informative", nounForm: "information" },
     { name: "arcane", nounForm: "arcana" },
     { name: "eldritch", nounForm: null },
     { name: "primal", nounForm: null },
@@ -93,6 +95,7 @@ const EFFECTS = [
     { name: "seismic", nounForm: "earthquake" },
     { name: "wind", nounForm: "wind" },
     { name: "stormy", nounForm: "storm" },
+    { name: "stunning", nounForm: null },
     { name: "rainy", nounForm: "rain" },
     { name: "misty", nounForm: "mist" },
     { name: "foggy", nounForm: "fog" },
@@ -115,7 +118,7 @@ const FORMS = [
     "ball", "sphere", "orb", "thought", "word",
     "wall", "barrier", "dome", "shield", "armor",
     "dart", "arrow", "spear", "blade", "hammer",
-    "rain", "storm", "cloud", "mist", "wave", "sky",
+    "rain", "storm", "cloud", "mist", "wave", "ground",
     "chain", "rope", "web", "cage", "prison",
     "eye", "hand", "claw", "fang", "wing",
     "gate", "door", "portal", "path", "bridge",
@@ -132,7 +135,7 @@ const TRAITS = [
     "Knight", "Mighty", "Mystical", "Nimble", "Perceptive", "Resilient",
     "Rider", "Sailor", "Scout", "Shadow", "Shieldbearer", "Spearmaster",
     "Stealthy", "Strong", "Sturdy", "Survivalist", "Swift", "Swordmaster",
-    "Thief", "Tough", "Tracker", "Trapfinder", "Veteran", "Vigorous",
+    "Thief", "Tough", "Tracker", "Trapfinder", "Vigorous",
     "Warrior", "Wise"
 ];
 
@@ -149,7 +152,7 @@ const RIBBONS = [
     "Kite Flyer", "Librarian", "Lost and Found Keeper", "Mask Maker", "Mason",
     "Merchant", "Mirror Polisher", "Moth Keeper", "Musician", "Noble",
     "Painter", "Pet Owner", "Pilgrim", "Poet", "Potter",
-    "Professional Mourner", "Professional Napper", "Professional Whistler", "Rain Dancer", "Relic Hunter",
+    "Professional Mourner", "Professional Napper", "Professional Whistler", "Rain Dancer",
     "Rumor Monger", "Scholar", "Scribe", "Sculptor", "Shadow Puppeteer",
     "Shepherd", "Singer", "Soup Taster", "Stable Hand", "Storyteller",
     "Tailor", "Tanner", "Tax Collector", "Vintner", "Watchmaker",
@@ -161,7 +164,7 @@ const QUIRKS = [
     "Addicted", "Afraid of Being Alone", "Afraid of Birds", "Afraid of Blood", "Afraid of Crowds",
     "Afraid of Darkness", "Afraid of Fire", "Afraid of Ghosts", "Afraid of Heights", "Afraid of Magic",
     "Afraid of Mirrors", "Afraid of Thunder", "Afraid of Water", "Allergic to Magic", "Always Fashionably Late",
-    "Arrogant", "Attracts Stray Animals", "Believes Animals Judge Them", "Believes They're Cursed with Bad Luck", "Boastful",
+    "Always Hungry", "Arrogant", "Attracts Stray Animals", "Believes Animals Judge Them", "Believes They're Cursed", "Boastful",
     "Cannot Whisper", "Can't Stop Telling Truth", "Chronic Amnesia", "Collects Strange Things", "Compulsive Counter",
     "Compulsive Hoarder", "Compulsive Liar", "Conspiracy Theorist", "Cowardly", "Cursed",
     "Distrustful", "Eats Only One Color", "Envious", "Extremely Superstitious", "Foul-Mouthed",
@@ -180,14 +183,14 @@ const QUIRKS = [
 const EQUIPMENT = [
     "Alchemical Glue", "Automatic Page Turner", "Bag of Ball Bearings", "Bag of Infinite Breadcrumbs", "Bedroll",
     "Bellows", "Billowing Cape", "Boots of Dryness", "Boots That Never Squeak", "Bottle of Glowing Ink",
-    "Bottomless Salt Shaker", "Caltrops", "Candle of Scent", "Chalk", "Chalk That Writes in Any Color",
+    "Bottomless Salt Shaker", "Bouncy Ball", "Caltrops", "Candle of Scent", "Chalk", "Chalk That Writes in Any Color",
     "Cloak of Billowing (Always Dramatic)", "Collapsible Bucket", "Collapsible Ladder", "Compass That Points to Nearest Tavern", "Crowbar",
     "Cursed Dice (Always Unlucky)", "Dust of Sneezing", "Endless Handkerchief", "Ever-burning Candle", "Ever-growing Beard",
     "Folding Boat", "Folding Chair", "Gloves That Never Get Dirty", "Grappling Glove", "Grappling Hook + Rope",
     "Grease", "Hat of Vermin", "Horn", "Hourglass", "Jar of Pickled Something",
     "Jar of Rope (200')", "Lantern + Oil", "Lesser Healing Potion", "Lucky Coin (Always Heads)", "Magnifying Glass",
     "Mechanical Bird", "Mechanical Frog", "Mirror", "Moldable Wax Figurine", "Music Box",
-    "Needle That Never Breaks", "Oil of Slipperiness", "Paired Bag", "Perfume", "Perfume That Smells Different to Everyone",
+    "Needle That Never Breaks", "Oil of Slipperiness", "Paired Bag", "Perfume", "Perfume of Any Scent",
     "Pocket Sand", "Pocket Sundial", "Portable Hammock", "Potion of Courage", "Potion of Hiccups",
     "Pouch of Marbles", "Quill + Ink", "Screaming Mushroom", "Seeking Paper Bird", "Self-Heating Teacup",
     "Self-inking Quill", "Self-Shuffling Deck of Cards", "Smelling Salts", "Smoke Pellets", "Smokey Torch",
@@ -212,7 +215,7 @@ const characteristics = {
 const health = new Array(6).fill(true);
 
 // Traits that give an extra heart
-const TOUGH_TRAITS = ["Berserker", "Mighty", "Resilient", "Strong", "Sturdy", "Tough", "Veteran", "Vigorous", "Warrior"];
+const TOUGH_TRAITS = ["Berserker", "Mighty", "Resilient", "Strong", "Sturdy", "Tough", "Vigorous", "Warrior"];
 
 // Quirks that remove a heart
 const WEAK_QUIRKS = ["Frail", "Sickly"];
