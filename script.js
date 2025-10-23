@@ -122,12 +122,26 @@ const FORMS = [
     "crown", "throne", "scepter", "circle", "star"
 ];
 
+// Table of adventurer traits (alphabetically sorted)
+const TRAITS = [
+    "Acrobat", "Agile", "Alchemist", "Archer", "Athletic",
+    "Axemaster", "Berserker", "Bladedancer", "Brawler", "Brave",
+    "Catburglar", "Charismatic", "Cunning", "Deadly", "Defender",
+    "Delver", "Duelist", "Explorer", "Fighter", "Healer",
+    "Herbalist", "Holy", "Hunter", "Knight", "Mystical",
+    "Nimble", "Perceptive", "Resilient", "Rider", "Sailor",
+    "Scout", "Shieldbearer", "Spearmaster", "Stealthy", "Strong",
+    "Sturdy", "Survivalist", "Swift", "Swordmaster", "Thief",
+    "Tough", "Tracker", "Trapfinder", "Veteran", "Vigorous",
+    "Warrior", "Wise"
+];
+
 // State to track generated spells
 const spells = new Array(6).fill(null);
 
 // State to track character characteristics
 const characteristics = {
-    adventurer: new Array(3).fill(''),
+    traits: new Array(3).fill(null),
     ribbon: new Array(3).fill(''),
     quirks: new Array(3).fill(''),
     equipment: new Array(3).fill('')
@@ -154,6 +168,17 @@ function capitalizeSpellName(str) {
         // Capitalize all other words
         return word.charAt(0).toUpperCase() + word.slice(1);
     }).join(' ');
+}
+
+// Generate a trait (with constraint to avoid repeating the previous trait)
+function generateTrait(previousTrait = null) {
+    if (previousTrait === null || TRAITS.length === 1) {
+        return randomElement(TRAITS);
+    }
+
+    // Filter out the previous trait to avoid repetition
+    const availableTraits = TRAITS.filter(t => t !== previousTrait);
+    return randomElement(availableTraits);
 }
 
 // Generate a spell name
@@ -257,6 +282,27 @@ function updateSpellRow(index) {
     saveCharacterSheet();
 }
 
+// Update the UI for a specific trait row
+function updateTraitRow(index) {
+    const row = document.querySelector(`.trait-row[data-index="${index}"]`);
+    const generateBtn = row.querySelector('.btn-generate');
+    const traitNameEl = row.querySelector('.trait-name');
+    const actionsEl = row.querySelector('.trait-actions');
+
+    if (characteristics.traits[index]) {
+        generateBtn.classList.add('hidden');
+        traitNameEl.textContent = characteristics.traits[index];
+        actionsEl.classList.remove('hidden');
+    } else {
+        generateBtn.classList.remove('hidden');
+        traitNameEl.textContent = '';
+        actionsEl.classList.add('hidden');
+    }
+
+    // Save to localStorage whenever UI updates
+    saveCharacterSheet();
+}
+
 // Generate all spells from index 0 up to and including targetIndex
 function generateSpellsUpTo(targetIndex) {
     for (let i = 0; i <= targetIndex; i++) {
@@ -276,6 +322,37 @@ function init() {
     for (let i = 0; i < spells.length; i++) {
         updateSpellRow(i);
     }
+
+    // Update UI for all trait rows
+    for (let i = 0; i < characteristics.traits.length; i++) {
+        updateTraitRow(i);
+    }
+
+    // Setup trait row event listeners
+    document.querySelectorAll('.trait-row').forEach((row, index) => {
+        const generateBtn = row.querySelector('.btn-generate');
+        const replaceBtn = row.querySelector('.btn-replace');
+        const deleteBtn = row.querySelector('.btn-delete');
+
+        // Generate button click
+        generateBtn.addEventListener('click', () => {
+            characteristics.traits[index] = generateTrait();
+            updateTraitRow(index);
+        });
+
+        // Replace button click
+        replaceBtn.addEventListener('click', () => {
+            const previousTrait = characteristics.traits[index];
+            characteristics.traits[index] = generateTrait(previousTrait);
+            updateTraitRow(index);
+        });
+
+        // Delete button click
+        deleteBtn.addEventListener('click', () => {
+            characteristics.traits[index] = null;
+            updateTraitRow(index);
+        });
+    });
 
     // Update characteristic inputs with loaded values
     document.querySelectorAll('.characteristic-row').forEach(row => {
