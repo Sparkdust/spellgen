@@ -1,6 +1,6 @@
-# Spell Name Generator
+# Spell Generator
 
-A web-based spell name generator that creates grammatically correct spell names by combining effects and forms.
+A web-based spell generator that creates grammatically correct spell names by combining effects and forms.
 
 ## Live Site
 
