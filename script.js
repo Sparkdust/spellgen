@@ -125,6 +125,14 @@ const FORMS = [
 // State to track generated spells
 const spells = new Array(6).fill(null);
 
+// State to track character characteristics
+const characteristics = {
+    adventurer: new Array(3).fill(''),
+    ribbon: new Array(3).fill(''),
+    quirks: new Array(3).fill(''),
+    equipment: new Array(3).fill('')
+};
+
 // Get a random element from an array
 function randomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -191,7 +199,8 @@ function saveCharacterSheet() {
     const characterName = document.getElementById('character-name').value;
     const characterSheet = {
         name: characterName,
-        spells: spells
+        spells: spells,
+        characteristics: characteristics
     };
     localStorage.setItem('spellgenCharacter', JSON.stringify(characterSheet));
 }
@@ -208,6 +217,17 @@ function loadCharacterSheet() {
             if (characterSheet.spells && Array.isArray(characterSheet.spells)) {
                 for (let i = 0; i < characterSheet.spells.length && i < spells.length; i++) {
                     spells[i] = characterSheet.spells[i];
+                }
+            }
+
+            // Load characteristics
+            if (characterSheet.characteristics) {
+                for (const section in characteristics) {
+                    if (characterSheet.characteristics[section] && Array.isArray(characterSheet.characteristics[section])) {
+                        for (let i = 0; i < characterSheet.characteristics[section].length && i < characteristics[section].length; i++) {
+                            characteristics[section][i] = characterSheet.characteristics[section][i] || '';
+                        }
+                    }
                 }
             }
         } catch (e) {
@@ -256,6 +276,23 @@ function init() {
     for (let i = 0; i < spells.length; i++) {
         updateSpellRow(i);
     }
+
+    // Update characteristic inputs with loaded values
+    document.querySelectorAll('.characteristic-row').forEach(row => {
+        const section = row.dataset.section;
+        const index = parseInt(row.dataset.index);
+        const input = row.querySelector('.characteristic-input');
+
+        if (characteristics[section] && characteristics[section][index] !== undefined) {
+            input.value = characteristics[section][index];
+        }
+
+        // Save when characteristic changes
+        input.addEventListener('input', () => {
+            characteristics[section][index] = input.value;
+            saveCharacterSheet();
+        });
+    });
 
     const rows = document.querySelectorAll('.spell-row');
 
