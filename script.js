@@ -378,8 +378,18 @@ function loadCharacterSheet() {
 function updateSpellRow(index) {
     const row = document.querySelector(`.spell-row[data-index="${index}"]`);
     const spellNameEl = row.querySelector('.spell-name');
+    const deleteBtn = row.querySelector('.btn-delete');
 
     spellNameEl.textContent = spells[index] || '';
+
+    // Update delete button disabled state
+    if (deleteBtn) {
+        if (!spells[index]) {
+            deleteBtn.classList.add('disabled');
+        } else {
+            deleteBtn.classList.remove('disabled');
+        }
+    }
 
     // Save to localStorage whenever UI updates
     saveCharacterSheet();
@@ -394,6 +404,16 @@ function updateCharacteristicRow(type, index) {
     if (!inputEl) return;
 
     inputEl.value = characteristics[type][index] || '';
+
+    // Update delete button disabled state
+    const deleteBtn = row.querySelector('.btn-delete');
+    if (deleteBtn) {
+        if (!characteristics[type][index]) {
+            deleteBtn.classList.add('disabled');
+        } else {
+            deleteBtn.classList.remove('disabled');
+        }
+    }
 
     // Update hearts if traits or quirks changed
     if (type === 'traits' || type === 'quirks') {
@@ -535,6 +555,13 @@ function init() {
             // Input change - save user's custom entry
             inputEl.addEventListener('input', () => {
                 characteristics[type][index] = inputEl.value || null;
+
+                // Update delete button disabled state
+                if (inputEl.value) {
+                    deleteBtn.classList.remove('disabled');
+                } else {
+                    deleteBtn.classList.add('disabled');
+                }
 
                 // Update hearts if traits or quirks changed
                 if (type === 'traits' || type === 'quirks') {
