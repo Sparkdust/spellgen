@@ -8,8 +8,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>Spell Generator</h1>
-
         <div class="character-header">
             <input type="text" id="character-name" class="character-name-input" placeholder="Character Name" />
         </div>
@@ -180,6 +178,14 @@
                         </div>
                     </div>
                     <div class="equipment-row" data-section="equipment" data-index="2">
+                        <button class="btn-generate">Generate</button>
+                        <div class="equipment-name"></div>
+                        <div class="equipment-actions hidden">
+                            <button class="btn-replace" title="Replace">↻</button>
+                            <button class="btn-delete" title="Delete">✕</button>
+                        </div>
+                    </div>
+                    <div class="equipment-row" data-section="equipment" data-index="3">
                         <button class="btn-generate">Generate</button>
                         <div class="equipment-name"></div>
                         <div class="equipment-actions hidden">

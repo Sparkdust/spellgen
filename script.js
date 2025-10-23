@@ -188,7 +188,7 @@ const characteristics = {
     traits: new Array(3).fill(null),
     ribbons: new Array(3).fill(null),
     quirks: new Array(3).fill(null),
-    equipment: new Array(3).fill(null)
+    equipment: new Array(4).fill(null)
 };
 
 // Get a random element from an array
