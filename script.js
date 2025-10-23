@@ -157,7 +157,7 @@ const spells = new Array(6).fill(null);
 // State to track character characteristics
 const characteristics = {
     traits: new Array(3).fill(null),
-    ribbon: new Array(3).fill(null),
+    ribbons: new Array(3).fill(null),
     quirks: new Array(3).fill(''),
     equipment: new Array(3).fill('')
 };
@@ -199,7 +199,7 @@ function generateFromList(list, previousValue = null) {
 // Lookup table for characteristic lists
 const CHARACTERISTIC_LISTS = {
     'traits': TRAITS,
-    'ribbon': RIBBONS
+    'ribbons': RIBBONS
 };
 
 // Generate a spell name
@@ -395,7 +395,7 @@ function init() {
 
     // Setup all characteristic types
     setupCharacteristicRows('traits');
-    setupCharacteristicRows('ribbon');
+    setupCharacteristicRows('ribbons');
 
     // Update characteristic inputs with loaded values
     document.querySelectorAll('.characteristic-row').forEach(row => {

@@ -86,7 +86,7 @@ h2 {
 }
 
 .traits-row,
-.ribbon-row,
+.ribbons-row,
 .characteristic-row {
     display: flex;
     align-items: center;
@@ -99,13 +99,13 @@ h2 {
 }
 
 .traits-row:hover,
-.ribbon-row:hover,
+.ribbons-row:hover,
 .characteristic-row:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
 .traits-name,
-.ribbon-name {
+.ribbons-name {
     flex: 1;
     font-size: 1.125rem;
     color: #f0c674;
@@ -113,13 +113,13 @@ h2 {
 }
 
 .traits-actions,
-.ribbon-actions {
+.ribbons-actions {
     display: flex;
     gap: 0.5rem;
 }
 
 .traits-actions.hidden,
-.ribbon-actions.hidden {
+.ribbons-actions.hidden {
     display: none;
 }
 
