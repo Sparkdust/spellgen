@@ -158,12 +158,11 @@ const QUIRKS = [
     "Compulsive Liar", "Cowardly", "Cursed", "Distrustful", "Envious",
     "Foul-Mouthed", "Gluttonous", "Greedy", "Gullible", "Haughty",
     "Honest to a Fault", "Impulsive", "Indecisive", "Jealous", "Kleptomaniac",
-    "Lawful to a Fault", "Lazy", "Loud", "Lover of Drink", "Lustful",
-    "Melancholic", "Merciful to a Fault", "Naive", "Nervous Tic", "Oath-Bound",
-    "Obsessive", "Overconfident", "Overly Curious", "Overspender", "Pacifist",
-    "Paranoid", "Perfectionist", "Prideful", "Reckless", "Secretive",
-    "Superstitious", "Suspicious", "Unforgiving", "Vengeful", "Vow of Poverty",
-    "Vow of Silence"
+    "Lawful to a Fault", "Lazy", "Loud", "Lover of Drink", "Melancholic",
+    "Merciful to a Fault", "Naive", "Nervous Tic", "Oath-Bound", "Obsessive",
+    "Overconfident", "Overly Curious", "Overspender", "Pacifist", "Paranoid",
+    "Perfectionist", "Prideful", "Reckless", "Secretive", "Superstitious",
+    "Suspicious", "Unforgiving", "Vengeful", "Vow of Poverty", "Vow of Silence"
 ];
 
 // State to track generated spells
