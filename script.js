@@ -186,6 +186,36 @@ function generateSpellName() {
     }
 }
 
+// Save character sheet to localStorage
+function saveCharacterSheet() {
+    const characterName = document.getElementById('character-name').value;
+    const characterSheet = {
+        name: characterName,
+        spells: spells
+    };
+    localStorage.setItem('spellgenCharacter', JSON.stringify(characterSheet));
+}
+
+// Load character sheet from localStorage
+function loadCharacterSheet() {
+    const saved = localStorage.getItem('spellgenCharacter');
+    if (saved) {
+        try {
+            const characterSheet = JSON.parse(saved);
+            document.getElementById('character-name').value = characterSheet.name || '';
+
+            // Load spells
+            if (characterSheet.spells && Array.isArray(characterSheet.spells)) {
+                for (let i = 0; i < characterSheet.spells.length && i < spells.length; i++) {
+                    spells[i] = characterSheet.spells[i];
+                }
+            }
+        } catch (e) {
+            console.error('Error loading character sheet:', e);
+        }
+    }
+}
+
 // Update the UI for a specific spell row
 function updateSpellRow(index) {
     const row = document.querySelector(`.spell-row[data-index="${index}"]`);
@@ -202,6 +232,9 @@ function updateSpellRow(index) {
         spellNameEl.textContent = '';
         actionsEl.classList.add('hidden');
     }
+
+    // Save to localStorage whenever UI updates
+    saveCharacterSheet();
 }
 
 // Generate all spells from index 0 up to and including targetIndex
@@ -216,6 +249,14 @@ function generateSpellsUpTo(targetIndex) {
 
 // Initialize event listeners
 function init() {
+    // Load saved character sheet
+    loadCharacterSheet();
+
+    // Update UI for all spell rows
+    for (let i = 0; i < spells.length; i++) {
+        updateSpellRow(i);
+    }
+
     const rows = document.querySelectorAll('.spell-row');
 
     rows.forEach((row, index) => {
@@ -239,6 +280,12 @@ function init() {
             spells[index] = null;
             updateSpellRow(index);
         });
+    });
+
+    // Save character name when it changes
+    const characterNameInput = document.getElementById('character-name');
+    characterNameInput.addEventListener('input', () => {
+        saveCharacterSheet();
     });
 }
 
