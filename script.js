@@ -136,13 +136,28 @@ const TRAITS = [
     "Warrior", "Wise"
 ];
 
+// Table of ribbons (alphabetically sorted) - character flavor/background skills
+const RIBBONS = [
+    "Actor", "Animal Trainer", "Astrologer", "Baker", "Barber",
+    "Beekeeper", "Beer Maker", "Blacksmith", "Bookbinder", "Brewer",
+    "Butcher", "Carpenter", "Cartographer", "Chef", "Cobbler",
+    "Collector", "Dancer", "Dog Breeder", "Falconer", "Farmer",
+    "Fisherman", "Fortune Teller", "Gambler", "Gardener", "Glassblower",
+    "Guide", "Historian", "Innkeeper", "Jeweler", "Librarian",
+    "Mason", "Merchant", "Musician", "Noble", "Painter",
+    "Pet Owner", "Pilgrim", "Poet", "Potter", "Scholar",
+    "Scribe", "Sculptor", "Shepherd", "Singer", "Stable Hand",
+    "Storyteller", "Tailor", "Tanner", "Tax Collector", "Vintner",
+    "Watchmaker", "Weaver", "Woodcarver"
+];
+
 // State to track generated spells
 const spells = new Array(6).fill(null);
 
 // State to track character characteristics
 const characteristics = {
     traits: new Array(3).fill(null),
-    ribbon: new Array(3).fill(''),
+    ribbon: new Array(3).fill(null),
     quirks: new Array(3).fill(''),
     equipment: new Array(3).fill('')
 };
@@ -179,6 +194,17 @@ function generateTrait(previousTrait = null) {
     // Filter out the previous trait to avoid repetition
     const availableTraits = TRAITS.filter(t => t !== previousTrait);
     return randomElement(availableTraits);
+}
+
+// Generate a ribbon (with constraint to avoid repeating the previous ribbon)
+function generateRibbon(previousRibbon = null) {
+    if (previousRibbon === null || RIBBONS.length === 1) {
+        return randomElement(RIBBONS);
+    }
+
+    // Filter out the previous ribbon to avoid repetition
+    const availableRibbons = RIBBONS.filter(r => r !== previousRibbon);
+    return randomElement(availableRibbons);
 }
 
 // Generate a spell name
@@ -303,6 +329,27 @@ function updateTraitRow(index) {
     saveCharacterSheet();
 }
 
+// Update the UI for a specific ribbon row
+function updateRibbonRow(index) {
+    const row = document.querySelector(`.ribbon-row[data-index="${index}"]`);
+    const generateBtn = row.querySelector('.btn-generate');
+    const ribbonNameEl = row.querySelector('.ribbon-name');
+    const actionsEl = row.querySelector('.ribbon-actions');
+
+    if (characteristics.ribbon[index]) {
+        generateBtn.classList.add('hidden');
+        ribbonNameEl.textContent = characteristics.ribbon[index];
+        actionsEl.classList.remove('hidden');
+    } else {
+        generateBtn.classList.remove('hidden');
+        ribbonNameEl.textContent = '';
+        actionsEl.classList.add('hidden');
+    }
+
+    // Save to localStorage whenever UI updates
+    saveCharacterSheet();
+}
+
 // Generate all spells from index 0 up to and including targetIndex
 function generateSpellsUpTo(targetIndex) {
     for (let i = 0; i <= targetIndex; i++) {
@@ -323,6 +370,16 @@ function generateTraitsUpTo(targetIndex) {
     }
 }
 
+// Generate all ribbons from index 0 up to and including targetIndex
+function generateRibbonsUpTo(targetIndex) {
+    for (let i = 0; i <= targetIndex; i++) {
+        if (!characteristics.ribbon[i]) {
+            characteristics.ribbon[i] = generateRibbon();
+            updateRibbonRow(i);
+        }
+    }
+}
+
 // Initialize event listeners
 function init() {
     // Load saved character sheet
@@ -336,6 +393,11 @@ function init() {
     // Update UI for all trait rows
     for (let i = 0; i < characteristics.traits.length; i++) {
         updateTraitRow(i);
+    }
+
+    // Update UI for all ribbon rows
+    for (let i = 0; i < characteristics.ribbon.length; i++) {
+        updateRibbonRow(i);
     }
 
     // Setup trait row event listeners
@@ -360,6 +422,31 @@ function init() {
         deleteBtn.addEventListener('click', () => {
             characteristics.traits[index] = null;
             updateTraitRow(index);
+        });
+    });
+
+    // Setup ribbon row event listeners
+    document.querySelectorAll('.ribbon-row').forEach((row, index) => {
+        const generateBtn = row.querySelector('.btn-generate');
+        const replaceBtn = row.querySelector('.btn-replace');
+        const deleteBtn = row.querySelector('.btn-delete');
+
+        // Generate button click - generates all ribbons up to this one
+        generateBtn.addEventListener('click', () => {
+            generateRibbonsUpTo(index);
+        });
+
+        // Replace button click
+        replaceBtn.addEventListener('click', () => {
+            const previousRibbon = characteristics.ribbon[index];
+            characteristics.ribbon[index] = generateRibbon(previousRibbon);
+            updateRibbonRow(index);
+        });
+
+        // Delete button click
+        deleteBtn.addEventListener('click', () => {
+            characteristics.ribbon[index] = null;
+            updateRibbonRow(index);
         });
     });
 
