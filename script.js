@@ -165,6 +165,21 @@ const QUIRKS = [
     "Suspicious", "Unforgiving", "Vengeful", "Vow of Poverty", "Vow of Silence"
 ];
 
+// Table of equipment (alphabetically sorted) - mundane, mechanical, and minor magical items
+const EQUIPMENT = [
+    "Alchemical Glue", "Bedroll", "Bellows", "Billowing Cape", "Boots of Dryness",
+    "Caltrops", "Candle of Scent", "Chalk", "Collapsible Ladder", "Crowbar",
+    "Dust of Sneezing", "Ever-burning Candle", "Ever-growing Beard", "Folding Chair", "Grease",
+    "Grappling Hook + Rope", "Horn", "Hourglass", "Lantern + Oil", "Lesser Healing Potion",
+    "Magnifying Glass", "Mechanical Bird", "Mirror", "Moldable Wax Figurine", "Music Box",
+    "Oil of Slipperiness", "Paired Bag", "Perfume", "Pocket Sand", "Potion of Courage",
+    "Pouch of Marbles", "Quill + Ink", "Screaming Mushroom", "Seeking Paper Bird", "Self-inking Quill",
+    "Smelling Salts", "Smoke Pellets", "Smokey Torch", "Soap of Cleansing", "Spyglass",
+    "Sticky Goo", "String", "Telescoping Pole", "Ten-foot Pole", "Tinderbox and Candles",
+    "Unending Chalk", "Vial of Acid", "Vial of Holy Water", "Waterskin", "Whistle",
+    "Wind-up Doll", "Wine"
+];
+
 // State to track generated spells
 const spells = new Array(6).fill(null);
 
@@ -173,7 +188,7 @@ const characteristics = {
     traits: new Array(3).fill(null),
     ribbons: new Array(3).fill(null),
     quirks: new Array(3).fill(null),
-    equipment: new Array(3).fill('')
+    equipment: new Array(3).fill(null)
 };
 
 // Get a random element from an array
@@ -214,7 +229,8 @@ function generateFromList(list, previousValue = null) {
 const CHARACTERISTIC_LISTS = {
     'traits': TRAITS,
     'ribbons': RIBBONS,
-    'quirks': QUIRKS
+    'quirks': QUIRKS,
+    'equipment': EQUIPMENT
 };
 
 // Generate a spell name
@@ -412,6 +428,7 @@ function init() {
     setupCharacteristicRows('traits');
     setupCharacteristicRows('ribbons');
     setupCharacteristicRows('quirks');
+    setupCharacteristicRows('equipment');
 
     // Update characteristic inputs with loaded values
     document.querySelectorAll('.characteristic-row').forEach(row => {

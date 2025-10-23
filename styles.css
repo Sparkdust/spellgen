@@ -71,6 +71,10 @@ h1 {
     margin-bottom: 0;
 }
 
+.spells-column .characteristic-section {
+    margin-top: 2rem;
+}
+
 h2 {
     color: #f0c674;
     font-size: 1.25rem;
@@ -88,6 +92,7 @@ h2 {
 .traits-row,
 .ribbons-row,
 .quirks-row,
+.equipment-row,
 .characteristic-row {
     display: flex;
     align-items: center;
@@ -102,13 +107,15 @@ h2 {
 .traits-row:hover,
 .ribbons-row:hover,
 .quirks-row:hover,
+.equipment-row:hover,
 .characteristic-row:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
 .traits-name,
 .ribbons-name,
-.quirks-name {
+.quirks-name,
+.equipment-name {
     flex: 1;
     font-size: 1.125rem;
     color: #f0c674;
@@ -117,14 +124,16 @@ h2 {
 
 .traits-actions,
 .ribbons-actions,
-.quirks-actions {
+.quirks-actions,
+.equipment-actions {
     display: flex;
     gap: 0.5rem;
 }
 
 .traits-actions.hidden,
 .ribbons-actions.hidden,
-.quirks-actions.hidden {
+.quirks-actions.hidden,
+.equipment-actions.hidden {
     display: none;
 }
 
