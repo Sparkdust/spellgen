@@ -85,7 +85,7 @@ h2 {
     gap: 0.5rem;
 }
 
-.trait-row,
+.traits-row,
 .ribbon-row,
 .characteristic-row {
     display: flex;
@@ -98,13 +98,13 @@ h2 {
     transition: background 0.3s ease;
 }
 
-.trait-row:hover,
+.traits-row:hover,
 .ribbon-row:hover,
 .characteristic-row:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
-.trait-name,
+.traits-name,
 .ribbon-name {
     flex: 1;
     font-size: 1.125rem;
@@ -112,13 +112,13 @@ h2 {
     font-weight: 500;
 }
 
-.trait-actions,
+.traits-actions,
 .ribbon-actions {
     display: flex;
     gap: 0.5rem;
 }
 
-.trait-actions.hidden,
+.traits-actions.hidden,
 .ribbon-actions.hidden {
     display: none;
 }
