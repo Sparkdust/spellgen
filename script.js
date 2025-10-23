@@ -27,7 +27,7 @@ const EFFECTS = [
     { name: "illusionary", nounForm: "illusion" },
     { name: "phantom", nounForm: "phantoms" },
     { name: "beast-summoning", nounForm: null },
-    { name: "summoning", nounForm: "summons" },
+    { name: "summoning", nounForm: "summoning" },
     { name: "banishing", nounForm: "banishment" },
     { name: "mutating", nounForm: "mutation" },
     { name: "transforming", nounForm: "transformation" },
