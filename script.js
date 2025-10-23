@@ -185,27 +185,22 @@ function capitalizeSpellName(str) {
     }).join(' ');
 }
 
-// Generate a trait (with constraint to avoid repeating the previous trait)
-function generateTrait(previousTrait = null) {
-    if (previousTrait === null || TRAITS.length === 1) {
-        return randomElement(TRAITS);
+// Generic function to generate from a list (with constraint to avoid repeating previous value)
+function generateFromList(list, previousValue = null) {
+    if (previousValue === null || list.length === 1) {
+        return randomElement(list);
     }
 
-    // Filter out the previous trait to avoid repetition
-    const availableTraits = TRAITS.filter(t => t !== previousTrait);
-    return randomElement(availableTraits);
+    // Filter out the previous value to avoid repetition
+    const availableOptions = list.filter(item => item !== previousValue);
+    return randomElement(availableOptions);
 }
 
-// Generate a ribbon (with constraint to avoid repeating the previous ribbon)
-function generateRibbon(previousRibbon = null) {
-    if (previousRibbon === null || RIBBONS.length === 1) {
-        return randomElement(RIBBONS);
-    }
-
-    // Filter out the previous ribbon to avoid repetition
-    const availableRibbons = RIBBONS.filter(r => r !== previousRibbon);
-    return randomElement(availableRibbons);
-}
+// Lookup table for characteristic lists
+const CHARACTERISTIC_LISTS = {
+    'traits': TRAITS,
+    'ribbon': RIBBONS
+};
 
 // Generate a spell name
 function generateSpellName() {
@@ -308,41 +303,22 @@ function updateSpellRow(index) {
     saveCharacterSheet();
 }
 
-// Update the UI for a specific trait row
-function updateTraitRow(index) {
-    const row = document.querySelector(`.trait-row[data-index="${index}"]`);
-    const generateBtn = row.querySelector('.btn-generate');
-    const traitNameEl = row.querySelector('.trait-name');
-    const actionsEl = row.querySelector('.trait-actions');
+// Generic function to update UI for a characteristic row
+function updateCharacteristicRow(type, index) {
+    const row = document.querySelector(`.${type}-row[data-index="${index}"]`);
+    if (!row) return;
 
-    if (characteristics.traits[index]) {
+    const generateBtn = row.querySelector('.btn-generate');
+    const nameEl = row.querySelector(`.${type}-name`);
+    const actionsEl = row.querySelector(`.${type}-actions`);
+
+    if (characteristics[type][index]) {
         generateBtn.classList.add('hidden');
-        traitNameEl.textContent = characteristics.traits[index];
+        nameEl.textContent = characteristics[type][index];
         actionsEl.classList.remove('hidden');
     } else {
         generateBtn.classList.remove('hidden');
-        traitNameEl.textContent = '';
-        actionsEl.classList.add('hidden');
-    }
-
-    // Save to localStorage whenever UI updates
-    saveCharacterSheet();
-}
-
-// Update the UI for a specific ribbon row
-function updateRibbonRow(index) {
-    const row = document.querySelector(`.ribbon-row[data-index="${index}"]`);
-    const generateBtn = row.querySelector('.btn-generate');
-    const ribbonNameEl = row.querySelector('.ribbon-name');
-    const actionsEl = row.querySelector('.ribbon-actions');
-
-    if (characteristics.ribbon[index]) {
-        generateBtn.classList.add('hidden');
-        ribbonNameEl.textContent = characteristics.ribbon[index];
-        actionsEl.classList.remove('hidden');
-    } else {
-        generateBtn.classList.remove('hidden');
-        ribbonNameEl.textContent = '';
+        nameEl.textContent = '';
         actionsEl.classList.add('hidden');
     }
 
@@ -360,22 +336,15 @@ function generateSpellsUpTo(targetIndex) {
     }
 }
 
-// Generate all traits from index 0 up to and including targetIndex
-function generateTraitsUpTo(targetIndex) {
-    for (let i = 0; i <= targetIndex; i++) {
-        if (!characteristics.traits[i]) {
-            characteristics.traits[i] = generateTrait();
-            updateTraitRow(i);
-        }
-    }
-}
+// Generic function to generate all characteristics from index 0 up to targetIndex
+function generateCharacteristicsUpTo(type, targetIndex) {
+    const list = CHARACTERISTIC_LISTS[type];
+    if (!list) return;
 
-// Generate all ribbons from index 0 up to and including targetIndex
-function generateRibbonsUpTo(targetIndex) {
     for (let i = 0; i <= targetIndex; i++) {
-        if (!characteristics.ribbon[i]) {
-            characteristics.ribbon[i] = generateRibbon();
-            updateRibbonRow(i);
+        if (!characteristics[type][i]) {
+            characteristics[type][i] = generateFromList(list);
+            updateCharacteristicRow(type, i);
         }
     }
 }
@@ -390,65 +359,43 @@ function init() {
         updateSpellRow(i);
     }
 
-    // Update UI for all trait rows
-    for (let i = 0; i < characteristics.traits.length; i++) {
-        updateTraitRow(i);
+    // Generic setup for characteristic rows (traits, ribbon, etc.)
+    function setupCharacteristicRows(type) {
+        // Update UI for all rows
+        for (let i = 0; i < characteristics[type].length; i++) {
+            updateCharacteristicRow(type, i);
+        }
+
+        // Setup event listeners
+        document.querySelectorAll(`.${type}-row`).forEach((row, index) => {
+            const generateBtn = row.querySelector('.btn-generate');
+            const replaceBtn = row.querySelector('.btn-replace');
+            const deleteBtn = row.querySelector('.btn-delete');
+            const list = CHARACTERISTIC_LISTS[type];
+
+            // Generate button - generates all up to this one
+            generateBtn.addEventListener('click', () => {
+                generateCharacteristicsUpTo(type, index);
+            });
+
+            // Replace button - avoids repeating current value
+            replaceBtn.addEventListener('click', () => {
+                const previousValue = characteristics[type][index];
+                characteristics[type][index] = generateFromList(list, previousValue);
+                updateCharacteristicRow(type, index);
+            });
+
+            // Delete button
+            deleteBtn.addEventListener('click', () => {
+                characteristics[type][index] = null;
+                updateCharacteristicRow(type, index);
+            });
+        });
     }
 
-    // Update UI for all ribbon rows
-    for (let i = 0; i < characteristics.ribbon.length; i++) {
-        updateRibbonRow(i);
-    }
-
-    // Setup trait row event listeners
-    document.querySelectorAll('.trait-row').forEach((row, index) => {
-        const generateBtn = row.querySelector('.btn-generate');
-        const replaceBtn = row.querySelector('.btn-replace');
-        const deleteBtn = row.querySelector('.btn-delete');
-
-        // Generate button click - generates all traits up to this one
-        generateBtn.addEventListener('click', () => {
-            generateTraitsUpTo(index);
-        });
-
-        // Replace button click
-        replaceBtn.addEventListener('click', () => {
-            const previousTrait = characteristics.traits[index];
-            characteristics.traits[index] = generateTrait(previousTrait);
-            updateTraitRow(index);
-        });
-
-        // Delete button click
-        deleteBtn.addEventListener('click', () => {
-            characteristics.traits[index] = null;
-            updateTraitRow(index);
-        });
-    });
-
-    // Setup ribbon row event listeners
-    document.querySelectorAll('.ribbon-row').forEach((row, index) => {
-        const generateBtn = row.querySelector('.btn-generate');
-        const replaceBtn = row.querySelector('.btn-replace');
-        const deleteBtn = row.querySelector('.btn-delete');
-
-        // Generate button click - generates all ribbons up to this one
-        generateBtn.addEventListener('click', () => {
-            generateRibbonsUpTo(index);
-        });
-
-        // Replace button click
-        replaceBtn.addEventListener('click', () => {
-            const previousRibbon = characteristics.ribbon[index];
-            characteristics.ribbon[index] = generateRibbon(previousRibbon);
-            updateRibbonRow(index);
-        });
-
-        // Delete button click
-        deleteBtn.addEventListener('click', () => {
-            characteristics.ribbon[index] = null;
-            updateRibbonRow(index);
-        });
-    });
+    // Setup all characteristic types
+    setupCharacteristicRows('traits');
+    setupCharacteristicRows('ribbon');
 
     // Update characteristic inputs with loaded values
     document.querySelectorAll('.characteristic-row').forEach(row => {
