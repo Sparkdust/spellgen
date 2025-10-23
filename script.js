@@ -125,59 +125,76 @@ const FORMS = [
 // Table of adventurer traits (alphabetically sorted)
 const TRAITS = [
     "Acrobat", "Agile", "Alchemist", "Archer", "Athletic",
-    "Axemaster", "Berserker", "Bladedancer", "Brawler", "Brave",
+    "Axemaster", "Beast Speaker", "Berserker", "Bladedancer", "Brawler", "Brave",
     "Catburglar", "Charismatic", "Deadly", "Defender",
-    "Delver", "Duelist", "Explorer", "Fighter", "Healer",
-    "Herbalist", "Holy", "Hunter", "Knight", "Mighty", "Mystical",
-    "Nimble", "Perceptive", "Resilient", "Rider", "Sailor",
-    "Scout", "Shieldbearer", "Spearmaster", "Stealthy", "Strong",
-    "Sturdy", "Survivalist", "Swift", "Swordmaster", "Thief",
-    "Tough", "Tracker", "Trapfinder", "Veteran", "Vigorous",
+    "Delver", "Dirty Fighter", "Duelist", "Explorer", "Fated", "Fighter",
+    "Healer", "Herbalist", "Hexer", "Holy", "Hunter", "Intimidating",
+    "Knight", "Mighty", "Mystical", "Nimble", "Perceptive", "Resilient",
+    "Rider", "Sailor", "Scout", "Shadow", "Shieldbearer", "Spearmaster",
+    "Stealthy", "Strong", "Sturdy", "Survivalist", "Swift", "Swordmaster",
+    "Thief", "Tough", "Tracker", "Trapfinder", "Veteran", "Vigorous",
     "Warrior", "Wise"
 ];
 
 // Table of ribbons (alphabetically sorted) - character flavor/background skills
 const RIBBONS = [
     "Actor", "Animal Trainer", "Astrologer", "Baker", "Barber",
-    "Beekeeper", "Beer Maker", "Blacksmith", "Bookbinder", "Brewer",
-    "Butcher", "Carpenter", "Cartographer", "Chef", "Cobbler",
-    "Collector", "Dancer", "Dog Breeder", "Falconer", "Farmer",
-    "Fisherman", "Fortune Teller", "Gambler", "Gardener", "Glassblower",
-    "Guide", "Historian", "Innkeeper", "Jeweler", "Librarian",
-    "Mason", "Merchant", "Musician", "Noble", "Painter",
-    "Pet Owner", "Pilgrim", "Poet", "Potter", "Scholar",
-    "Scribe", "Sculptor", "Shepherd", "Singer", "Stable Hand",
-    "Storyteller", "Tailor", "Tanner", "Tax Collector", "Vintner",
-    "Watchmaker", "Weaver", "Woodcarver"
+    "Beekeeper", "Beer Maker", "Bell Ringer", "Blacksmith", "Bookbinder",
+    "Brewer", "Butcher", "Carpenter", "Cartographer", "Cheese Sculptor",
+    "Chef", "Cloud Watcher", "Cobbler", "Collector", "Curse Collector",
+    "Dancer", "Dog Breeder", "Dream Interpreter", "Echo Collector", "Exotic Pet Sitter",
+    "Failed Prophet", "Falconer", "Farmer", "Fisherman", "Fortune Cookie Writer",
+    "Fortune Teller", "Gambler", "Gardener", "Gargoyle Cleaner", "Ghost Whisperer",
+    "Glassblower", "Guide", "Historian", "Innkeeper", "Jeweler",
+    "Kite Flyer", "Librarian", "Lost and Found Keeper", "Mask Maker", "Mason",
+    "Merchant", "Mirror Polisher", "Moth Keeper", "Musician", "Noble",
+    "Painter", "Pet Owner", "Pilgrim", "Poet", "Potter",
+    "Professional Mourner", "Professional Napper", "Professional Whistler", "Rain Dancer", "Relic Hunter",
+    "Rumor Monger", "Scholar", "Scribe", "Sculptor", "Shadow Puppeteer",
+    "Shepherd", "Singer", "Soup Taster", "Stable Hand", "Storyteller",
+    "Tailor", "Tanner", "Tax Collector", "Vintner", "Watchmaker",
+    "Weaver", "Woodcarver"
 ];
 
 // Table of quirks (alphabetically sorted) - flaws and complications
 const QUIRKS = [
-    "Addicted", "Afraid of Blood", "Afraid of Crowds", "Afraid of Darkness", "Afraid of Fire",
-    "Afraid of Heights", "Afraid of Magic", "Afraid of Water", "Arrogant", "Boastful",
-    "Compulsive Liar", "Cowardly", "Cursed", "Distrustful", "Envious",
-    "Foul-Mouthed", "Gluttonous", "Greedy", "Gullible", "Haughty",
+    "Addicted", "Afraid of Being Alone", "Afraid of Birds", "Afraid of Blood", "Afraid of Crowds",
+    "Afraid of Darkness", "Afraid of Fire", "Afraid of Ghosts", "Afraid of Heights", "Afraid of Magic",
+    "Afraid of Mirrors", "Afraid of Thunder", "Afraid of Water", "Allergic to Magic", "Always Fashionably Late",
+    "Arrogant", "Attracts Stray Animals", "Believes Animals Judge Them", "Believes They're Cursed with Bad Luck", "Boastful",
+    "Cannot Whisper", "Can't Stop Telling Truth", "Chronic Amnesia", "Collects Strange Things", "Compulsive Counter",
+    "Compulsive Hoarder", "Compulsive Liar", "Conspiracy Theorist", "Cowardly", "Cursed",
+    "Distrustful", "Eats Only One Color", "Envious", "Extremely Superstitious", "Foul-Mouthed",
+    "Gluttonous", "Greedy", "Gullible", "Haughty", "Hiccups When Lying",
     "Honest to a Fault", "Impulsive", "Indecisive", "Jealous", "Kleptomaniac",
-    "Lawful to a Fault", "Lazy", "Loud", "Lover of Drink", "Melancholic",
-    "Merciful to a Fault", "Naive", "Nervous Tic", "Oath-Bound", "Obsessive",
-    "Overconfident", "Overly Curious", "Overspender", "Pacifist", "Paranoid",
-    "Perfectionist", "Prideful", "Reckless", "Secretive", "Superstitious",
-    "Suspicious", "Unforgiving", "Vengeful", "Vow of Poverty", "Vow of Silence"
+    "Laughs at Inappropriate Times", "Lawful to a Fault", "Lazy", "Loud", "Loudmouth",
+    "Lover of Drink", "Melancholic", "Merciful to a Fault", "Must Rhyme When Speaking", "Naive",
+    "Narcoleptic", "Nervous Tic", "Oath-Bound", "Obsessive", "Overconfident",
+    "Overly Curious", "Overspender", "Pacifist", "Paranoid", "Perfectionist",
+    "Prideful", "Prophetic Dreams (Always Wrong)", "Reckless", "Secretive", "Sees Ghosts (No One Believes)",
+    "Sleepwalker", "Speaks in Third Person", "Superstitious", "Suspicious", "Talks to Inanimate Objects",
+    "Thinks They're Famous", "Unforgiving", "Vengeful", "Vow of Poverty", "Vow of Silence"
 ];
 
 // Table of equipment (alphabetically sorted) - mundane, mechanical, and minor magical items
 const EQUIPMENT = [
-    "Alchemical Glue", "Bedroll", "Bellows", "Billowing Cape", "Boots of Dryness",
-    "Caltrops", "Candle of Scent", "Chalk", "Collapsible Ladder", "Crowbar",
-    "Dust of Sneezing", "Ever-burning Candle", "Ever-growing Beard", "Folding Chair", "Grease",
-    "Grappling Hook + Rope", "Horn", "Hourglass", "Lantern + Oil", "Lesser Healing Potion",
-    "Magnifying Glass", "Mechanical Bird", "Mirror", "Moldable Wax Figurine", "Music Box",
-    "Oil of Slipperiness", "Paired Bag", "Perfume", "Pocket Sand", "Potion of Courage",
-    "Pouch of Marbles", "Quill + Ink", "Screaming Mushroom", "Seeking Paper Bird", "Self-inking Quill",
-    "Smelling Salts", "Smoke Pellets", "Smokey Torch", "Soap of Cleansing", "Spyglass",
-    "Sticky Goo", "String", "Telescoping Pole", "Ten-foot Pole", "Tinderbox and Candles",
+    "Alchemical Glue", "Automatic Page Turner", "Bag of Ball Bearings", "Bag of Infinite Breadcrumbs", "Bedroll",
+    "Bellows", "Billowing Cape", "Boots of Dryness", "Boots That Never Squeak", "Bottle of Glowing Ink",
+    "Bottomless Salt Shaker", "Caltrops", "Candle of Scent", "Chalk", "Chalk That Writes in Any Color",
+    "Cloak of Billowing (Always Dramatic)", "Collapsible Bucket", "Collapsible Ladder", "Compass That Points to Nearest Tavern", "Crowbar",
+    "Cursed Dice (Always Unlucky)", "Dust of Sneezing", "Endless Handkerchief", "Ever-burning Candle", "Ever-growing Beard",
+    "Folding Boat", "Folding Chair", "Gloves That Never Get Dirty", "Grappling Glove", "Grappling Hook + Rope",
+    "Grease", "Hat of Vermin", "Horn", "Hourglass", "Jar of Pickled Something",
+    "Jar of Rope (200')", "Lantern + Oil", "Lesser Healing Potion", "Lucky Coin (Always Heads)", "Magnifying Glass",
+    "Mechanical Bird", "Mechanical Frog", "Mirror", "Moldable Wax Figurine", "Music Box",
+    "Needle That Never Breaks", "Oil of Slipperiness", "Paired Bag", "Perfume", "Perfume That Smells Different to Everyone",
+    "Pocket Sand", "Pocket Sundial", "Portable Hammock", "Potion of Courage", "Potion of Hiccups",
+    "Pouch of Marbles", "Quill + Ink", "Screaming Mushroom", "Seeking Paper Bird", "Self-Heating Teacup",
+    "Self-inking Quill", "Self-Shuffling Deck of Cards", "Smelling Salts", "Smoke Pellets", "Smokey Torch",
+    "Soap of Cleansing", "Soap That Never Runs Out", "Spring-Loaded Boots", "Spyglass", "Sticky Goo",
+    "Stone That's Always Warm", "String", "Telescoping Pole", "Ten-foot Pole", "Tinderbox and Candles",
     "Unending Chalk", "Vial of Acid", "Vial of Holy Water", "Waterskin", "Whistle",
-    "Wind-up Doll", "Wine"
+    "Wind-up Doll", "Wind-up Mouse", "Wine"
 ];
 
 // State to track generated spells
