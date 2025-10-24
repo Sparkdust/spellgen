@@ -281,6 +281,16 @@ h2 {
         font-size: 2rem;
     }
 
+    .character-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .health-container {
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
     .spell-row {
         flex-wrap: wrap;
     }
